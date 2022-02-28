@@ -1,0 +1,23 @@
+- name: Add Interface IP Address
+  vyos.vyos.vyos_config:
+    lines:
+    - set interfaces ethernet "{{ wan_interface }}" address "{{ wan_ip_address }}"
+    - set interfaces ethernet "{{ wan_interface }}" description "{{ wan_interface_description }}"
+    - set protocols static route 0.0.0.0/0 next-hop "{{ wan_gateway }}"
+    - set interfaces ethernet "{{ mgmt_interface }}" address "{{ mgmt_ip_address }}"
+    - set interfaces ethernet "{{ mgmt_interface }}" description "{{ mgmt_interface_description }}"
+    - set interfaces ethernet {{ lan_interface }} address {{ lan_ip_address }}
+    - set interfaces ethernet {{ lan_interface }} description {{ lan_interface_description }}
+    - set service dhcp-server shared-network-name LAN subnet "{{ lan_ip_address  }}"
+    - set service dhcp-server shared-network-name LAN subnet "{{ lan_ip_address  }}" range 0 start "{{ dhcp_start }}"
+    - set service dhcp-server shared-network-name LAN subnet "{{ lan_ip_address  }}" range 0 stop "{{ dhcp_end }}"
+    - set service dhcp-server shared-network-name LAN subnet "{{ lan_ip_address  }}" default-router "{{ lan_ip_address }}"
+    - set service dhcp-server shared-network-name LAN subnet "{{ lan_ip_address  }}" dns-server "{{ dns_server }}"
+    - set nat source rule 100 source address "{{ lan_ip_address  }}"
+    - set nat source rule 100 outbound-interface "{{ wan_interface }}"
+    - set nat source rule 100 translation address masquerade
+    - set service dns forwarding cache-size 0
+    - set service dns forwarding listen-on "{{ lan_interface }}"
+    - set service dns forwarding name-server "{{ dns_server }}"
+    - set service ssh port 22
+    - set service ssh listen-address "{{ mgmt_ip_address }}"
