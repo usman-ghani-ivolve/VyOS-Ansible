@@ -12,8 +12,9 @@
     - set service dhcp-server shared-network-name LAN subnet "{{ lan_subnet }}" range 0 start "{{ dhcp_start }}"
     - set service dhcp-server shared-network-name LAN subnet "{{ lan_subnet }}" range 0 stop "{{ dhcp_end }}"
     - set service dhcp-server shared-network-name LAN subnet "{{ lan_subnet }}" default-router "{{ default_router }}"
+    - set service dhcp-server shared-network-name LAN subnet 192.168.0.0/24 dns-server 8.8.8.8
     # - set service dhcp-server shared-network-name LAN subnet "{{ lan_subnet }}" dns-server "{{ dns_server }}"
-    - set nat source rule 100 source address "{{ lan_ip_address  }}"
+    - set nat source rule 100 source address "{{ lan_subnet  }}"
     - set nat source rule 100 outbound-interface "{{ wan_interface }}"
     - set nat source rule 100 translation address masquerade
     - set service dns forwarding cache-size 0
