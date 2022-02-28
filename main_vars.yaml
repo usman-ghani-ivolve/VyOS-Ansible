@@ -1,3 +1,3 @@
-wan_ip_address: "20.30.40.50"
+wan_ip_address: "20.30.40.50/24"
 wan_gateway: "20.30.40.1"
-mgmt_ip_address: "10.0.0.102"
+mgmt_ip_address: "10.0.0.102/24"
