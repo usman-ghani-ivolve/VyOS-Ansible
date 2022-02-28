@@ -1,4 +1,4 @@
-- name: Add Interface IP Address
+- name: Conifgure IP Addresses
   vyos.vyos.vyos_config:
     lines:
     - set interfaces ethernet "{{ wan_interface }}" address "{{ wan_ip_address }}"
@@ -8,17 +8,26 @@
     - set interfaces ethernet "{{ mgmt_interface }}" description "{{ mgmt_interface_description }}"
     - set interfaces ethernet {{ lan_interface }} address {{ lan_ip_address }}
     - set interfaces ethernet {{ lan_interface }} description {{ lan_interface_description }}
+
+- name: Conifgure DHCP Service
+  vyos.vyos.vyos_config:
+    lines:
     - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}"
     - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}" range 0 start "{{ dhcp_start }}"
     - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}" range 0 stop "{{ dhcp_end }}"
     - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}" default-router "{{ default_router }}"
-    - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet 192.168.0.0/24 dns-server 8.8.8.8
-    # - set service dhcp-server shared-network-name LAN subnet "{{ lan_subnet }}" dns-server "{{ dns_server }}"
+    - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}" dns-server "{{ dns_server }}"
+
+- name: Conifgure SNAT
+  vyos.vyos.vyos_config:
+    lines:
     - set nat source rule 100 source address "{{ lan_subnet  }}"
     - set nat source rule 100 outbound-interface "{{ wan_interface }}"
     - set nat source rule 100 translation address masquerade
     - set service dns forwarding cache-size 0
+
+- name: Conifgure DNS Service
+  vyos.vyos.vyos_config:
+    lines:
     - set service dns forwarding listen-on "{{ lan_interface }}"
     - set service dns forwarding name-server "{{ dns_server }}"
-    - set service ssh port 22
-    - set service ssh listen-address "{{ mgmt_ip_address }}"
