@@ -1,0 +1,9 @@
+---
+- name: Configure VyOS
+  hosts: all
+  user: usman
+  gather_facts: false
+  vars_files:
+    - ./main_vars.yaml
+  roles:
+    - role: interfaces
