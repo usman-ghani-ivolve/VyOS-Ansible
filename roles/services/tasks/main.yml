@@ -1,2 +1,2 @@
 ---
-# tasks file for services
+- include_tasks: "{{ service.function }}.yml"

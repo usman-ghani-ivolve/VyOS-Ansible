@@ -1,0 +1,14 @@
+- name: CONFIGURE [ADD] DNAT
+  vyos.vyos.vyos_config:
+    lines:
+    - set nat destination rule {{ rule_number }} destination address {{ destination_address }}
+    - set nat destination rule {{ rule_number }} inbound-interface {{ interface }}
+    - set nat destination rule {{ rule_number }} protocol {{ protocol }}
+    - set nat destination rule {{ rule_number }} translation address {{ translation_address }}
+  when: action == "add"
+
+- name: CONFIGURE [REMOVE] DNAT
+  vyos.vyos.vyos_config:
+    lines:
+    - delete nat destination rule {{ rule_number }}
+  when: action == "remove"

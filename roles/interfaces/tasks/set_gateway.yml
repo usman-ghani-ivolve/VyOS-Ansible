@@ -1,0 +1,15 @@
+---
+- name: Set Gateway
+  vyos.vyos.vyos_config:
+    lines:
+    - set interfaces ethernet {{ lan_interface }} address {{ old_gateway }}
+    - del interfaces ethernet {{ lan_interface }} address {{ new_gateway }}
+  when: service.dhcp.enabled == false
+
+- name: Set Gateway
+  vyos.vyos.vyos_config:
+    lines:
+    - set interfaces ethernet {{ lan_interface }} address {{ old_gateway }}
+    - set service dhcp-server shared-network-name {{ lan_interface_description }} subnet "{{ lan_subnet }}" default-router "{{ default_router }}"
+    - del interfaces ethernet {{ lan_interface }} address {{ new_gateway }}
+  when: service.dhcp.enabled == true

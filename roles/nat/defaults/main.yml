@@ -1,2 +1,2 @@
 ---
-# defaults file for nat
+interface: "eth0"

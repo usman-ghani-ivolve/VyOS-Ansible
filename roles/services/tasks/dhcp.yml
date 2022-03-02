@@ -1,0 +1,42 @@
+---
+- name: Conifgure DHCP Service
+  vyos.vyos.vyos_config:
+    lines:
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }} start {{ dhcp_start }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }} stop {{ dhcp_end }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} default-router {{ default_router }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} dns-server {{ dns_server }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} lease {{ lease }}
+  when: action == "add"
+
+- name: Conifgure DHCP Service
+  vyos.vyos.vyos_config:
+    lines:
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }}
+  when: action == "remove"
+
+- name: Add DNS Server
+  vyos.vyos.vyos_config:
+    lines:
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} dns-server {{ dns_server }}
+  when: action == "add_dns"
+
+- name: Remove DNS Server
+  vyos.vyos.vyos_config:
+    lines:
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} dns-server {{ dns_server }}
+  when: action == "remove_dns"
+
+- name: Add DHCP Range
+  vyos.vyos.vyos_config:
+    lines:
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }} start {{ dhcp_start }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }} stop {{ dhcp_end }}
+  when: action == "add_range"
+
+- name: Add DHCP Range
+  vyos.vyos.vyos_config:
+    lines:
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }}
+  when: action == "remove_range"

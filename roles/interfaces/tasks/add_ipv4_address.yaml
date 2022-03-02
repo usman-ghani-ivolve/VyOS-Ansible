@@ -1,8 +1,0 @@
----
-- name: Add Interface IP Address
-  vyos.vyos.vyos_l3_interfaces:
-    config:
-    - name: {{ interface_name }}
-      ipv4:
-      - address: {{ add_ipv4_address }}
-    state: merged

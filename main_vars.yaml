@@ -1,3 +1,79 @@
-wan_ip_address: "20.30.40.50/24"
-wan_gateway: "20.30.40.1"
-mgmt_ip_address: "10.0.0.102/24"
+default:
+  wan_ip_address: "20.30.40.50/24"
+  wan_gateway: "20.30.40.1"
+  mgmt_ip_address: "10.0.0.102/24"
+
+
+  bootstrap: "false"
+
+
+
+
+  wan_interface: "eth0"
+  mgmt_interface: "eth1"
+  lan_interface: "eth2"
+  lan_subnet: "192.168.0.0/24"
+  lan_ip_address: "192.168.0.1/24"
+  dns_server: "8.8.8.8"
+  default_router: "192.168.0.1"
+  dhcp_start: "192.168.0.2"
+  dhcp_end: "192.168.0.254"
+  default_rule_number: "100"
+
+######### EIP ########
+eip:
+  elastic_ip: "false"
+  function: "remove_eip" #Valid options [add_eip, remove_eip]
+  address: "20.30.40.100"
+
+
+######### Port Forwarding ########
+port_fwd:
+  rule_number: "40"
+  interface: "eth0"
+  protocol: "tcp"
+  destination_address: "20.30.40.50"
+  translation_address: "192.168.0.100"
+  destination_port: "2222"
+  translation_port: "22"
+  function: "remove_port_fwd"
+
+######### DNAT ########
+dnat:
+  rule_number: "50"
+  interface: "eth0"
+  protocol: "all"  #Valid options [add_eip, remove_eip]
+  destination_address: "{{ eip.address }}"
+  translation_address: "192.168.0.100"
+
+######### SNAT ########
+snat:
+  rule_number: "50"
+  interface: "eth0"
+  protocol: "all"
+  source_address: "192.168.0.100"
+  translation_address: "{{ eip.address }}"
+
+######### INTERFACE ########
+interface:
+  function: "configure_subnet"
+  ip_address: "192.168.0.1/24"
+  old_ip_address: "192.168.1.1/24"
+  name: "eth2"
+
+######### Service ########
+service:
+  function: "dhcp"
+  dhcp:
+    enabled: "true"
+    network_name: "LAN"
+    subnet: "192.168.0.0/24"
+    lease: "86400"
+    range: "0"
+    start: "192.168.0.2"
+    end: "192.168.0.254"
+    default_router: "192.168.0.1"
+    dns_server: "8.8.8.8"
+    old_subnet: "192.168.1.0/24"
+
+

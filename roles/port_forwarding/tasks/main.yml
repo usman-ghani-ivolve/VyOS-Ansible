@@ -1,2 +1,2 @@
 ---
-# tasks file for port_forwarding
+- include_tasks: "{{ port_fwd.function }}.yml"

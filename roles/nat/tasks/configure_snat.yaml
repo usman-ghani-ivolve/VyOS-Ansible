@@ -1,0 +1,14 @@
+- name: CONFIGURE [ADD] SNAT
+  vyos.vyos.vyos_config:
+    lines:
+    - set nat source rule {{ rule_number }} outbound-interface {{ interface }}
+    - set nat source rule {{ rule_number }} protocol {{ protocol }}
+    - set nat source rule {{ rule_number }} source address {{ source_address }}
+    - set nat source rule {{ rule_number }} translation address {{ translation_address }}
+  when: action == "add"
+
+- name: CONFIGURE [REMOVE] SNAT
+  vyos.vyos.vyos_config:
+    lines:
+    - delete nat source rule {{ rule_number }}
+  when: action == "remove"

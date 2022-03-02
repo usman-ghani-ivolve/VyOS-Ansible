@@ -6,6 +6,17 @@
     - ./main_vars.yaml
 
   tasks:
-    - name: Adding Aide Installation Role
+    - name: Adding Bootstrap Role
       include_role:
         name: bootstrap
+      when: default.bootstrap == "true"
+    
+    - name: Adding EIP Role
+      include_role:
+        name: elastic_ip
+      when: eip.elastic_ip == "true"
+
+    - name: Adding Port Forward Role
+      include_role:
+        name: interfaces
+      # when: port_fwd.elastic_ip == "false"

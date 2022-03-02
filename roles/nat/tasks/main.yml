@@ -1,2 +1,2 @@
 ---
-# tasks file for nat
+- include_tasks: "{{ function }}.yaml"

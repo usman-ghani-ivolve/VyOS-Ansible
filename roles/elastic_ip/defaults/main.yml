@@ -1,2 +1,5 @@
 ---
-# defaults file for elastic_ip
+dnat.protocol: "all"
+snat.protocol: "all"
+dnat.interface: "eth0"
+snat.interface: "eth0"
