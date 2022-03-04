@@ -45,7 +45,6 @@
       import_role:
         name: firewall
       vars:
-        function: "{{firewall.function}}"
         name: "{{firewall.name}}"
         rule_number: "{{firewall.rule_number}}"
         action: "{{firewall.action}}"
@@ -64,3 +63,25 @@
         disabled: "{{firewall.disabled}}"
         state: "{{firewall.state}}"
       when: firewalld is defined
+
+    - name: Configure Subnet
+      import_role:
+        name: interfaces
+      when: configure_network is defined
+
+    - name: Configure DHCP
+      import_role:
+        name: services
+      vars:
+        action: "{{ service.dhcp.action }}"
+        enabled: "{{ service.dhcp.enabled }}"
+        network_name: "{{ service.dhcp.network_name }}"
+        subnet: "{{ service.dhcp.subnet }}"
+        lease: "{{ service.dhcp.lease }}"
+        range: "{{ service.dhcp.range }}"
+        start: "{{ service.dhcp.start }}"
+        end: "{{ service.dhcp.end }}"
+        default_router: "{{ service.dhcp.default_router }}"
+        dns_server: "{{ service.dhcp.dns_server }}"
+        old_subnet: "{{ service.dhcp.old_subnet }}"
+      when: configure_dhcp is defined

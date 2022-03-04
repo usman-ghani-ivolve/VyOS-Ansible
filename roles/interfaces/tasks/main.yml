@@ -1,2 +1,2 @@
 ---
-- include_tasks: "{{ interface.function }}.yml"
+- include_tasks: "{{ network.function }}.yml"

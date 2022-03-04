@@ -67,25 +67,28 @@ snat:
   translation_address: "{{ eip.address }}"
 
 ######### INTERFACE ########
-interface:
-  function: "configure_ipv4"
-  action: "add"
-  ip_address: "192.168.0.1/24"
-  old_ip_address: "192.168.1.1/24"
-  name: "eth2"
+network:
+  function: "configure_subnet"
+  subnet: "192.168.1.0/24"
+  interface: "eth2"
+  interface_description: "LAN"
+  ip_address: "192.168.10.12/24"
+  old_ip_address: "192.168.1.12/24"
+  default_router: "192.168.10.12"
 
 ######### Service ########
 service:
   function: "dhcp"
   dhcp:
+    action: "remove_dns"
     enabled: "true"
     network_name: "LAN"
-    subnet: "192.168.0.0/24"
+    subnet: "192.168.10.0/24"
     lease: "86400"
-    range: "range-2"
-    start: "192.168.0.2"
-    end: "192.168.0.254"
-    default_router: "192.168.0.1"
+    range: "range-1"
+    start: "192.168.10.19"
+    end: "192.168.10.254"
+    default_router: "192.168.10.12"
     dns_server: "8.8.8.8"
     old_subnet: "192.168.1.0/24"
 

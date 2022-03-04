@@ -12,8 +12,20 @@
 - name: Conifgure DHCP Service
   vyos.vyos.vyos_config:
     lines:
-    - delete service dhcp-server shared-network-name "{{ network_name }}" subnet "{{ subnet }}"
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }}
   when: action == "remove"
+
+- name: Enable DHCP Service
+  vyos.vyos.vyos_config:
+    lines:
+    - delete service dhcp-server shared-network-name {{ network_name }} disable
+  when: action == "enable"
+
+- name: Disable DHCP Service
+  vyos.vyos.vyos_config:
+    lines:
+    - set service dhcp-server shared-network-name {{ network_name }} disable
+  when: action == "disable"
 
 - name: Add DNS Server
   vyos.vyos.vyos_config:
@@ -24,7 +36,7 @@
 - name: Remove DNS Server
   vyos.vyos.vyos_config:
     lines:
-    - delete service dhcp-server shared-network-name "{{ network_name }}" subnet "{{ subnet }}" dns-server "{{ dns_server }}"
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} dns-server {{ dns_server }}
   when: action == "remove_dns"
 
 - name: Add DHCP Range
@@ -37,5 +49,5 @@
 - name: Remove DHCP Range
   vyos.vyos.vyos_config:
     lines:
-    - delete service dhcp-server shared-network-name "{{ network_name }}" subnet "{{ subnet }}" range "{{ range }}"
-  when: action == "remove_range"
+    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }}
+  when: action == remove_range"

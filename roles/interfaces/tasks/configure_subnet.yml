@@ -1,12 +1,13 @@
 - name: Configure Sunbet | IP Address
   vyos.vyos.vyos_config:
     lines:
-    - set interfaces ethernet {{ interface.name }} address {{ interface.ip_address }}
-    - delete interfaces ethernet {{ interface.name }} address {{ interface.old_ip_address }}
+    - set interfaces ethernet {{ network.interface }} address '{{ network.ip_address }}'
+    - delete interfaces ethernet {{ network.interface }} address '{{ network.old_ip_address }}'
 
 - name: CONFIGURE Subnet | Add DHCP
-  import_role:
-    role: services
+  include_role:
+    name: services
+    tasks_from: "dhcp"
   vars:
     action: "add"
     network_name: "{{ service.dhcp.network_name }}"
@@ -20,8 +21,9 @@
   when: service.dhcp.enabled == "true"
 
 - name: CONFIGURE Subnet | Remove DHCP
-  import_role:
-    role: services
+  include_role:
+    name: services
+    tasks_from: "dhcp"
   vars:
     action: "remove"
     network_name: "{{ service.dhcp.network_name }}"
