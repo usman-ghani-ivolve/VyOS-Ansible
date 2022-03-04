@@ -1,2 +1,2 @@
 ---
-- include_tasks: "{{ function }}.yaml"
+- include_tasks: "{{ nat.function }}.yaml"

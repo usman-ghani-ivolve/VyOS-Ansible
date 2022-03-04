@@ -1,3 +1,0 @@
-wan_interface_description: "WAN"
-mgmt_interface_description: "VyOS MGMT"
-lan_interface_description: "LAN"

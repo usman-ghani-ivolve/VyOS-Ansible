@@ -1,62 +1,75 @@
+######### DEFAULT ########
 default:
-  wan_ip_address: "20.30.40.50/24"
-  wan_gateway: "20.30.40.1"
-  mgmt_ip_address: "10.0.0.102/24"
-
-
-  bootstrap: "false"
-
-
-
-
   wan_interface: "eth0"
-  mgmt_interface: "eth1"
+  
   lan_interface: "eth2"
   lan_subnet: "192.168.0.0/24"
-  lan_ip_address: "192.168.0.1/24"
-  dns_server: "8.8.8.8"
-  default_router: "192.168.0.1"
+  lan_ip: "192.168.0.1"
+  
+  mgmt_interface: "eth1"
+  mgmt_ip_address: "10.0.0.102/24"
+
   dhcp_start: "192.168.0.2"
   dhcp_end: "192.168.0.254"
-  default_rule_number: "100"
+  dns_server: "8.8.8.8"
+  default_router: "192.168.0.1"
+  lease: "86400"
+
+  snat_rule_number: "100"
+
+######### FUNCTION ########
+# get_config:
+# elastic_ip:
+# bootstrap:
+# port_forwarding:
+
+######### BOOTSTRAP ########
+common:
+  function: get_config
+  resource: "all" #bgp_address_family, bgp_global, firewall_global, firewall_interfaces, firewall_rules, interfaces, l3_interfaces, lag_interfaces, lldp_global, lldp_interfaces, logging_global, ntp_global, ospf_interfaces, ospfv2, ospfv3, prefix_lists, route_maps, snmp_server, static_routes
+
+######### BOOTSTRAP ########
+init:
+  function: "bootstrap"
+  wan_ip: ""
+  wan_gateway: "20.30.40.1"
 
 ######### EIP ########
 eip:
-  elastic_ip: "false"
   function: "remove_eip" #Valid options [add_eip, remove_eip]
   address: "20.30.40.100"
 
-
 ######### Port Forwarding ########
 port_fwd:
-  rule_number: "40"
-  interface: "eth0"
+  function: "add_port_fwd"
   protocol: "tcp"
   destination_address: "20.30.40.50"
-  translation_address: "192.168.0.100"
+  translation_address: "192.168.0.6"
   destination_port: "2222"
   translation_port: "22"
-  function: "remove_port_fwd"
 
 ######### DNAT ########
 dnat:
+  action: "add"
   rule_number: "50"
   interface: "eth0"
-  protocol: "all"  #Valid options [add_eip, remove_eip]
+  protocol: "tcp"  #Valid options [add_eip, remove_eip]
   destination_address: "{{ eip.address }}"
-  translation_address: "192.168.0.100"
+  translation_address: "192.168.0.6"
 
 ######### SNAT ########
 snat:
+  action: "add"
   rule_number: "50"
   interface: "eth0"
   protocol: "all"
-  source_address: "192.168.0.100"
+  source_address: "192.168.0.6"
   translation_address: "{{ eip.address }}"
 
 ######### INTERFACE ########
 interface:
-  function: "configure_subnet"
+  function: "configure_ipv4"
+  action: "add"
   ip_address: "192.168.0.1/24"
   old_ip_address: "192.168.1.1/24"
   name: "eth2"
@@ -69,11 +82,50 @@ service:
     network_name: "LAN"
     subnet: "192.168.0.0/24"
     lease: "86400"
-    range: "0"
+    range: "range-2"
     start: "192.168.0.2"
     end: "192.168.0.254"
     default_router: "192.168.0.1"
     dns_server: "8.8.8.8"
     old_subnet: "192.168.1.0/24"
+
+######### Firewall ########
+firewall:
+  function: "add_rule"
+  name: "OUTSIDE-IN"      #can't rename.
+  default_action: "drop"
+  rule_set_description: "all ssh via 2222"
+  enable_default_log: "true"
+  interface: "eth0"
+  direction: "in"
+  rule_number: "10"
+  action: "accept"
+  rule_description: ""
+  destination_address: "192.168.0.6" #ip, subnet, ip-range,invert"
+  destination_address_group: ""
+  destination_network_group: ""
+  destination_port_group: ""
+  destination_port: "22"
+  source_address: ""
+  source_address_group: ""
+  source_network_group: ""
+  source_port_group: ""
+  source_port: ""
+  protocol: "tcp"
+  disabled: "false"
+  state:
+    established: "y"
+    new: "y"
+    related: "y"
+    invalid: "f"
+
+
+
+
+
+
+
+
+
 
 

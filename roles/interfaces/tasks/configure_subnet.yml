@@ -1,4 +1,3 @@
----
 - name: Configure Sunbet | IP Address
   vyos.vyos.vyos_config:
     lines:

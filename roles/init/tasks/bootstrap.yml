@@ -1,0 +1,128 @@
+# - name: Conifgure WAN Interface
+#   include_role:
+#     name: interfaces
+#     tasks_from: configure_ipv4
+#   vars:
+#     action: "add"
+#     interface: "{{ default.wan_interface }}"
+#     address: "{{ bootstrap.wan_ip }}"
+
+# - name: Conifgure Router Gateway
+#   vyos.vyos.vyos_config:
+#     lines:
+#     - set protocols static route 0.0.0.0/0 next-hop "{{ bootstrap.wan_gateway }}"
+
+- name: Conifgure LAN Interface
+  include_role:
+    name: interfaces
+    tasks_from: configure_ipv4
+  vars:
+    action: "add"
+    interface: "{{ default.lan_interface }}"
+    address: "{{ default.lan_ip }}/24"
+
+- name: Conifgure DHCP on LAN
+  include_role:
+    name: services
+    tasks_from: dhcp
+  vars:
+    action: "add"
+    network_name: "LAN"
+    subnet: "{{ default.lan_subnet }}"
+    range: "default_range"
+    dhcp_start: "{{ default.dhcp_start }}"
+    dhcp_end: "{{ default.dhcp_end }}"
+    default_router: "{{ default.default_router }}"
+    dns_server: "{{ default.dns_server }}"
+    lease: "{{ default.lease }}"
+
+
+- name: Conifgure SNAT
+  include_role:
+    name: nat
+    tasks_from: configure_snat
+  vars:
+    action: "add"
+    rule_number: "{{ default.snat_rule_number }}"
+    interface: "{{ default.wan_interface }}"
+    protocol: "all"
+    source_address: "{{ default.lan_subnet }}"
+    translation_address: "masquerade"
+
+- name: Conifgure DNS Service
+  vyos.vyos.vyos_config:
+    lines:
+    - set service dns forwarding cache-size '0'
+    - set service dns forwarding listen-address "{{ default.lan_ip }}"
+    - set service dns forwarding allow-from "{{ default.lan_subnet }}"
+    - set service dns forwarding name-server "{{ default.dns_server }}"
+
+- name: Configuring Firewall | Add Default INBOUND Ruleset
+  include_role:
+    name: firewall
+    tasks_from: add_ruleset
+  vars:
+    name: "OUTSIDE-IN"      #can't rename.
+    default_action: "drop"
+    rule_set_description: "Default Rule"
+    enable_default_log: "true"
+    interface: "eth0"
+    direction: "in"
+
+- name: Configuring Firewall | Add Default INBOUND Rule
+  include_role:
+    name: firewall
+    tasks_from: add_rule
+  vars:
+    name: "OUTSIDE-IN"      #can't rename.
+    rule_number: "100"
+    action: "accept"
+    rule_description: "block all incomming traffic from wan"
+    destination_address: "" #ip, subnet, ip-range,invert"
+    destination_address_group: ""
+    destination_network_group: ""
+    destination_port_group: ""
+    destination_port: ""
+    source_address: ""
+    source_address_group: ""
+    source_network_group: ""
+    source_port_group: ""
+    source_port: ""
+    protocol: "all"
+    disabled: "false"
+    state: "{'established': 'true', 'related': 'true'}"
+
+- name: Configuring Firewall | Add Default LOCAL Ruleset
+  include_role:
+    name: firewall
+    tasks_from: add_ruleset
+  vars:
+    name: "OUTSIDE-LOCAL"      #can't rename.
+    default_action: "drop"
+    rule_set_description: "Default Rule"
+    enable_default_log: "true"
+    interface: "eth0"
+    direction: "local"
+
+- name: Configuring Firewall | Add Default LOCAL Rule
+  include_role:
+    name: firewall
+    tasks_from: add_rule
+  vars:
+    name: "OUTSIDE-LOCAL"      #can't rename.
+    rule_number: "100"
+    action: "accept"
+    rule_description: "Block all Local Destined traffic"
+    destination_address: "" #ip, subnet, ip-range,invert"
+    destination_address_group: ""
+    destination_network_group: ""
+    destination_port_group: ""
+    destination_port: ""
+    source_address: ""
+    source_address_group: ""
+    source_network_group: ""
+    source_port_group: ""
+    source_port: ""
+    protocol: ""
+    disabled: "false"
+    state: "{'established': 'true', 'related': 'true'}"

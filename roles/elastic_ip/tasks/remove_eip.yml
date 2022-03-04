@@ -1,0 +1,24 @@
+- name: Remove EIP on WAN Interface
+  include_role:
+    name: interfaces
+    tasks_from: configure_ipv4
+  vars:
+    action: "remove"
+    interface: "{{ default.wan_interface }}"
+    address: "{{ eip.address }}/32"
+
+- name: CONFIGURE DNAT
+  include_role:
+    name: nat
+    tasks_from: configure_dnat
+  vars:
+    action: "remove"
+    rule_number: "{{ dnat.rule_number }}"
+
+- name: CONFIGURE SNAT
+  include_role:
+    name: nat
+    tasks_from: configure_snat
+  vars:
+    action: "remove"
+    rule_number: "{{ snat.rule_number }}"

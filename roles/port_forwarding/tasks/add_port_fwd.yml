@@ -1,12 +1,11 @@
----
 - name: Add Port Forwading Rule
-  import_role:
-    role: nat
+  include_role:
+    name: nat
+    tasks_from: configure_dnat
   vars:
-    function: "configure_dnat"
     action: "add"
-    rule_number: "{{ port_fwd.rule_number }}"
-    interface: "{{ port_fwd.interface }}"
+    rule_number: "{{ dnat.rule_number }}"
+    interface: "{{ default.wan_interface }}"
     protocol: "{{ port_fwd.protocol }}"
     destination_address: "{{ port_fwd.destination_address }}"
     translation_address: "{{ port_fwd.translation_address }}"
@@ -14,5 +13,5 @@
 - name: Configure Ports
   vyos.vyos.vyos_config:
     lines:
-    - set nat destination rule {{ port_fwd.rule_number }} destination port {{ port_fwd.destination_port }}
-    - set nat destination rule {{ port_fwd.rule_number }} translation port {{ port_fwd.translation_port }}
+    - set nat destination rule {{ dnat.rule_number }} destination port {{ port_fwd.destination_port }}
+    - set nat destination rule {{ dnat.rule_number }} translation port {{ port_fwd.translation_port }}

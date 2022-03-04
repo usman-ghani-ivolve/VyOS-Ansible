@@ -6,17 +6,61 @@
     - ./main_vars.yaml
 
   tasks:
-    - name: Adding Bootstrap Role
-      include_role:
-        name: bootstrap
-      when: default.bootstrap == "true"
+  
+    - name: Get Configuration
+      import_role:
+        name: common
+      vars:
+        resource: "{{ common.resource }}"
+      when: get_config is defined
     
-    - name: Adding EIP Role
-      include_role:
-        name: elastic_ip
-      when: eip.elastic_ip == "true"
+    - name: Bootstrap Router
+      import_role:
+        name: init
+      when: bootstrap is defined
 
-    - name: Adding Port Forward Role
-      include_role:
-        name: interfaces
-      # when: port_fwd.elastic_ip == "false"
+    - name: Configure Elastic IP
+      import_role:
+        name: elastic_ip
+      when: elastic_ip is defined
+
+    - name: Conifgure Port Forwarding
+      import_role:
+        name: port_forwarding
+      when: port_forwarding is defined
+
+    - name: Conifgure Ruleset
+      import_role:
+        name: firewall
+      vars:
+        name: "{{firewall.name}}"
+        default_action: "{{firewall.default_action}}"
+        rule_set_description: "{{firewall.rule_set_description}}"
+        enable_default_log: "{{firewall.enable_default_log}}"
+        interface: "{{ firewall.interface }}"
+        direction: "{{ firewall.direction }}"
+      when: firewalld is defined
+
+    - name: Adding Firewall Role
+      import_role:
+        name: firewall
+      vars:
+        function: "{{firewall.function}}"
+        name: "{{firewall.name}}"
+        rule_number: "{{firewall.rule_number}}"
+        action: "{{firewall.action}}"
+        rule_description: "{{firewall.rule_description}}"
+        destination_address: "{{firewall.destination_address}}"
+        destination_address_group: "{{firewall.destination_address_group}}"
+        destination_network_group: "{{firewall.destination_network_group}}"
+        destination_port_group: "{{firewall.destination_port_group}}"
+        destination_port: "{{firewall.destination_port}}"
+        source_address: "{{firewall.source_address}}"
+        source_address_group: "{{firewall.source_address_group}}"
+        source_network_group: "{{firewall.source_network_group}}"
+        source_port_group: "{{firewall.source_port_group}}"
+        source_port: "{{firewall.source_port}}"
+        protocol: "{{firewall.protocol}}"
+        disabled: "{{firewall.disabled}}"
+        state: "{{firewall.state}}"
+      when: firewalld is defined

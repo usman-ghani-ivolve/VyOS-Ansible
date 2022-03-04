@@ -1,0 +1,7 @@
+- name: Get Configuration
+  vyos.vyos.vyos_facts:
+    gather_subset: all
+    gather_network_resources: "{{ resource }}"
+  register: response
+- debug:
+    msg: "{{ response.ansible_facts.ansible_network_resources }}"

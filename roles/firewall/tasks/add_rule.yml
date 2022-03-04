@@ -1,0 +1,28 @@
+- name: Add Rule
+  vyos.vyos.vyos_firewall_rules:
+    config:
+    - afi: ipv4
+      rule_sets:
+      - name: "{{ name }}"
+        rules:
+        - number: "{{ rule_number }}"
+          action: "{{ action }}"
+          description: "{{ rule_description }}"
+          destination:
+            address: "{{ destination_address }}"
+            group:
+              address_group: "{{ destination_address_group }}"
+              network_group: "{{ destination_network_group }}"
+              port_group: "{{ destination_port_group }}"
+            port: "{{ destination_port }}"
+          source:
+            address: "{{ source_address }}"
+            group:
+              address_group: "{{ source_address_group }}"
+              network_group: "{{ source_network_group }}"
+              port_group: "{{ source_port_group }}"
+            port: "{{ source_port }}"
+          protocol: "{{ protocol }}"
+          disabled: "{{ disabled }}"
+          state: "{{ state }}"
+    state: merged

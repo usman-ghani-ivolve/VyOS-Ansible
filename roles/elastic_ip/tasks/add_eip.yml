@@ -1,33 +1,32 @@
----
 - name: Add EIP on WAN Interface
-  import_role:
-    role: interfaces
+  include_role:
+    name: interfaces
+    tasks_from: configure_ipv4
   vars:
-    function: "configure_ipv4"
     action: "add"
     interface: "{{ default.wan_interface }}"
     address: "{{ eip.address }}/32"
 
 - name: CONFIGURE DNAT
-  import_role:
-    role: nat
+  include_role:
+    name: nat
+    tasks_from: configure_dnat
   vars:
-    function: "configure_dnat"
     action: "add"
     rule_number: "{{ dnat.rule_number }}"
-    interface: "{{ dnat.interface }}"
-    protcol: "{{ dnat.protocol }}"
+    interface: "{{ default.wan_interface }}"
+    protocol: "all"
     destination_address: "{{ eip.address }}"
     translation_address: "{{ dnat.translation_address }}"
 
 - name: CONFIGURE SNAT
-  import_role:
-    role: nat
+  include_role:
+    name: nat
+    tasks_from: configure_snat
   vars:
-    function: "configure_snat"
     action: "add"
     rule_number: "{{ snat.rule_number }}"
-    interface: "{{ snat.interface }}"
-    protcol: "{{ snat.protocol }}"
+    interface: "{{ default.wan_interface }}"
+    protocol: "all"
     source_address: "{{ snat.source_address }}"
     translation_address: "{{ eip.address }}"
