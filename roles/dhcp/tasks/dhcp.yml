@@ -12,7 +12,7 @@
 - name: Conifgure DHCP Service
   vyos.vyos.vyos_config:
     lines:
-    - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }}
+    - delete service dhcp-server shared-network-name {{ network_name }}
   when: action == "remove"
 
 - name: Enable DHCP Service
@@ -50,4 +50,4 @@
   vyos.vyos.vyos_config:
     lines:
     - delete service dhcp-server shared-network-name {{ network_name }} subnet {{ subnet }} range {{ range }}
-  when: action == remove_range"
+  when: action == "remove_range"

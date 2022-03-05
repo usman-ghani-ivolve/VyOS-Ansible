@@ -4,13 +4,13 @@
 #     tasks_from: configure_ipv4
 #   vars:
 #     action: "add"
-#     interface: "{{ default.wan_interface }}"
-#     address: "{{ bootstrap.wan_ip }}"
+#     interface: "{{ default_wan_interface }}"
+#     address: "{{ wan_ip }}"
 
 # - name: Conifgure Router Gateway
 #   vyos.vyos.vyos_config:
 #     lines:
-#     - set protocols static route 0.0.0.0/0 next-hop "{{ bootstrap.wan_gateway }}"
+#     - set protocols static route 0.0.0.0/0 next-hop "{{ wan_gateway }}"
 
 - name: Conifgure LAN Interface
   include_role:
@@ -18,23 +18,22 @@
     tasks_from: configure_ipv4
   vars:
     action: "add"
-    interface: "{{ default.lan_interface }}"
-    address: "{{ default.lan_ip }}/24"
+    interface: "{{ default_lan_interface }}"
+    address: "{{ default_lan_ip }}/24"
 
 - name: Conifgure DHCP on LAN
   include_role:
-    name: services
-    tasks_from: dhcp
+    name: dhcp
   vars:
     action: "add"
     network_name: "LAN"
-    subnet: "{{ default.lan_subnet }}"
+    subnet: "{{ default_lan_subnet }}"
     range: "default_range"
-    dhcp_start: "{{ default.dhcp_start }}"
-    dhcp_end: "{{ default.dhcp_end }}"
-    default_router: "{{ default.default_router }}"
-    dns_server: "{{ default.dns_server }}"
-    lease: "{{ default.lease }}"
+    dhcp_start: "{{ default_dhcp_start }}"
+    dhcp_end: "{{ default_dhcp_end }}"
+    default_router: "{{ default_default_router }}"
+    dns_server: "{{ default_dns_server }}"
+    lease: "{{ default_lease }}"
 
 
 - name: Conifgure SNAT
@@ -43,19 +42,19 @@
     tasks_from: configure_snat
   vars:
     action: "add"
-    rule_number: "{{ default.snat_rule_number }}"
-    interface: "{{ default.wan_interface }}"
+    rule_number: "{{ default_snat_rule_number }}"
+    interface: "{{ default_wan_interface }}"
     protocol: "all"
-    source_address: "{{ default.lan_subnet }}"
+    source_address: "{{ default_lan_subnet }}"
     translation_address: "masquerade"
 
 - name: Conifgure DNS Service
   vyos.vyos.vyos_config:
     lines:
     - set service dns forwarding cache-size '0'
-    - set service dns forwarding listen-address "{{ default.lan_ip }}"
-    - set service dns forwarding allow-from "{{ default.lan_subnet }}"
-    - set service dns forwarding name-server "{{ default.dns_server }}"
+    - set service dns forwarding listen-address "{{ default_lan_ip }}"
+    - set service dns forwarding allow-from "{{ default_lan_subnet }}"
+    - set service dns forwarding name-server "{{ default_dns_server }}"
 
 - name: Configuring Firewall | Add Default INBOUND Ruleset
   include_role:

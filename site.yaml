@@ -73,15 +73,15 @@
       import_role:
         name: services
       vars:
-        action: "{{ service.dhcp.action }}"
-        enabled: "{{ service.dhcp.enabled }}"
-        network_name: "{{ service.dhcp.network_name }}"
-        subnet: "{{ service.dhcp.subnet }}"
-        lease: "{{ service.dhcp.lease }}"
-        range: "{{ service.dhcp.range }}"
-        start: "{{ service.dhcp.start }}"
-        end: "{{ service.dhcp.end }}"
-        default_router: "{{ service.dhcp.default_router }}"
-        dns_server: "{{ service.dhcp.dns_server }}"
-        old_subnet: "{{ service.dhcp.old_subnet }}"
-      when: configure_dhcp is defined
+        action: "{{ dhcp_action }}"
+        enabled: "{{ dhcp_enabled }}"
+        network_name: "{{ dhcp_network_name }}"
+        subnet: "{{ dhcp_subnet }}"
+        lease: "{{ dhcp_lease }}"
+        range: "{{ dhcp_range }}"
+        start: "{{ dhcp_start }}"
+        end: "{{ dhcp_end }}"
+        default_router: "{{ dhcp_default_router }}"
+        dns_server: "{{ dhcp_dns_server }}"
+        old_subnet: "{{ dhcp_old_subnet }}"
+    #   when: configure_dhcp is defined
