@@ -13,9 +13,9 @@ Role Variables
 --------------
 
 ```
-- init.function: "bootstrap"
-- init.wan_ip: ""
-- init.wan_gateway: ""
+* init.function: "bootstrap"
+* init.wan_ip: ""
+* init.wan_gateway: ""
 ```
 
 Dependencies
