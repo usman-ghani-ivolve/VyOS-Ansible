@@ -1,4 +1,0 @@
-- name: Remove Rule
-  vyos.vyos.vyos_config:
-    lines:
-    - delete firewall name {{ name }} rule {{ rule_number }}

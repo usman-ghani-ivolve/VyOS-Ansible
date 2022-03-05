@@ -6,7 +6,7 @@
       - name: "{{ name }}"
         rules:
         - number: "{{ rule_number }}"
-          action: "{{ action }}"
+          action: "{{ rule_action }}"
           description: "{{ rule_description }}"
           destination:
             address: "{{ destination_address }}"
@@ -26,3 +26,10 @@
           disabled: "{{ disabled }}"
           state: "{{ state }}"
     state: merged
+  when: action == "add"
+
+- name: Remove Rule
+  vyos.vyos.vyos_config:
+    lines:
+    - delete firewall name {{ name }} rule {{ rule_number }}
+  when: action == "remove"

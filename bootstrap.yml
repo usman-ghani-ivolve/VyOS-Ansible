@@ -3,7 +3,12 @@
   roles:
     - role: firewall
       vars:
-        firewall_function: "remove_ruleset"
-        name: "myruleset-1"
-        direction: "in"
-        interface: "eth0"
+        firewall_function: group
+        action: remove_member
+        type: network
+        group_name: mygroup
+        group_description:
+        member: 192.168.0.0/24
+        members:
+          - address: 192.168.0.0/24
+          - address: 192.168.1.0/24

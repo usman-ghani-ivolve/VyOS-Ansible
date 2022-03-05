@@ -1,0 +1,46 @@
+- name: Add Ruleset
+  block:
+    - name: Add Ruleset
+      vyos.vyos.vyos_firewall_rules:
+        config:
+        - afi: ipv4
+          rule_sets:
+          - name: "{{ name }}"
+            default_action: "{{ default_action }}"
+            description: "{{ rule_set_description }}"
+            enable_default_log: "{{ enable_default_log }}"
+        state: merged
+
+    - name: Applying Ruleset
+      vyos.vyos.vyos_firewall_interfaces:
+        config:
+        - access_rules:
+          - afi: ipv4
+            rules:
+            - name: "{{ name }}"
+              direction: "{{ direction }}"
+          name: "{{ interface }}"
+        state: merged
+  when: action == "add"
+
+- name: Remove Ruleset
+  block:
+  - name: Unapply Ruleset
+    vyos.vyos.vyos_firewall_interfaces:
+      config:
+      - access_rules:
+        - afi: ipv4
+          rules:
+          - name: "{{ name }}"
+            direction: "{{ direction }}"
+        name: "{{ interface }}"
+      state: deleted
+
+  - name: Remove Ruleset
+    vyos.vyos.vyos_firewall_rules:
+      config:
+      - afi: ipv4
+        rule_sets:
+        - name: "{{ name }}"
+      state: deleted
+  when: action == "remove"

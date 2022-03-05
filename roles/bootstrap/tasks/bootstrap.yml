@@ -59,8 +59,9 @@
 - name: Configuring Firewall | Add Default INBOUND Ruleset
   include_role:
     name: firewall
-    tasks_from: add_ruleset
+    tasks_from: ruleset
   vars:
+    action: "add"
     name: "OUTSIDE-IN"      #can't rename.
     default_action: "drop"
     rule_set_description: "Default Rule"
@@ -71,11 +72,12 @@
 - name: Configuring Firewall | Add Default INBOUND Rule
   include_role:
     name: firewall
-    tasks_from: add_rule
+    tasks_from: rule
   vars:
+    action: "add"
     name: "OUTSIDE-IN"      #can't rename.
     rule_number: "100"
-    action: "accept"
+    rule_action: "accept"
     rule_description: "block all incomming traffic from wan"
     destination_address: "" #ip, subnet, ip-range,invert"
     destination_address_group: ""
@@ -94,8 +96,9 @@
 - name: Configuring Firewall | Add Default LOCAL Ruleset
   include_role:
     name: firewall
-    tasks_from: add_ruleset
+    tasks_from: ruleset
   vars:
+    action: "add"
     name: "OUTSIDE-LOCAL"      #can't rename.
     default_action: "drop"
     rule_set_description: "Default Rule"
@@ -106,11 +109,12 @@
 - name: Configuring Firewall | Add Default LOCAL Rule
   include_role:
     name: firewall
-    tasks_from: add_rule
+    tasks_from: rule
   vars:
+    action: "add"
     name: "OUTSIDE-LOCAL"      #can't rename.
     rule_number: "100"
-    action: "accept"
+    rule_action: "accept"
     rule_description: "Block all Local Destined traffic"
     destination_address: "" #ip, subnet, ip-range,invert"
     destination_address_group: ""

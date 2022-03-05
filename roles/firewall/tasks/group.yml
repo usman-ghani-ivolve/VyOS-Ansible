@@ -1,0 +1,50 @@
+- name: "Add address group"
+  vyos.vyos.vyos_firewall_global:
+    config:
+      group:
+        address_group:
+        - name: "{{ group_name }}"
+          description: "{{ group_description }}"
+          members: "{{ members }}"
+    state: merged
+  when: type == "address" and action == "add"
+
+- name: "Add network group"
+  vyos.vyos.vyos_firewall_global:
+    config:
+      group:
+        network_group:
+        - name: "{{ group_name }}"
+          description: "{{ group_description }}"
+          members: "{{ members }}"
+    state: merged
+  when: type == "network" and action == "add"
+
+- name: "Add port group"
+  vyos.vyos.vyos_firewall_global:
+    config:
+      group:
+        port_group:
+        - name: "{{ group_name }}"
+          description: "{{ group_description }}"
+          members: "{{ members }}"
+    state: merged
+  when: type == "port" and action == "add"
+
+- name: "Remove {{ type | lower }} group"
+  vyos.vyos.vyos_config:
+    lines:
+      -  delete firewall group {{ type }}-group {{ group_name }}
+  when: action == "remove"
+
+- name: "Add {{ type | lower }} group member"
+  vyos.vyos.vyos_config:
+    lines:
+      -  set firewall group {{ type }}-group {{ group_name }} {{ type }} {{ member }}
+  when: action == "add_member"
+
+- name: "Remove {{ type | lower }} group member"
+  vyos.vyos.vyos_config:
+    lines:
+      -  delete firewall group {{ type }}-group {{ group_name }} {{ type }} {{ member }}
+  when: action == "remove_member"

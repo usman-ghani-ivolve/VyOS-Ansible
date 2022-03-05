@@ -55,7 +55,27 @@ firewall_function
 name
 rule_number
 ```
-
+**Add Address/Network/Port Group**
+```
+action
+type
+group_name
+group_description
+members
+```
+**Remove Address/Network/Port Group**
+```
+action
+type
+group_name
+```
+**Add/Remove Address/Network/Port Member**
+```
+action
+type
+group_name
+member
+```
 
 Dependencies
 ------------
