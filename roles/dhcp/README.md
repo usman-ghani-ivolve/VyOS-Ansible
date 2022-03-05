@@ -11,7 +11,7 @@ Requirements
 
 Role Variables
 --------------
-
+**Add DHCP**
 ```
 action
 network_name
@@ -22,6 +22,33 @@ dhcp_end
 default_router
 dns_server
 lease
+```
+**Remove DHCP**
+```
+action
+network_name
+subnet
+```
+**Enable/Disable DHCP**
+```
+action
+network_name
+```
+**Add/Remove DNS**
+```
+action
+network_name
+subnet
+dns_server
+```
+**Add/Remove DHCP Range**
+```
+action
+network_name
+subnet
+range
+dhcp_start
+dhcp_end
 ```
 
 Dependencies

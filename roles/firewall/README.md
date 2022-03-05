@@ -1,7 +1,7 @@
 Role Name
 =========
 
-This role configure Firewall.
+This role configure firewall.
 
 Requirements
 ------------
