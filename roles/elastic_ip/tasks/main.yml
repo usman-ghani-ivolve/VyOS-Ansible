@@ -1,2 +1,2 @@
 ---
-- include_tasks: "{{ eip.function }}.yml"
+- include_tasks: "{{ eip_function }}.yml"

@@ -35,9 +35,8 @@ init:
   wan_gateway: "20.30.40.1"
 
 ######### EIP ########
-eip:
-  function: "remove_eip" #Valid options [add_eip, remove_eip]
-  address: "20.30.40.100"
+eip_function: "remove_eip" #Valid options [add_eip, remove_eip]
+eip_address: "20.30.40.100"
 
 ######### Port Forwarding ########
 port_fwd:
@@ -76,47 +75,43 @@ network:
   old_ip_address: "192.168.1.12/24"
   default_router: "192.168.10.12"
 
-######### Service ########
-service:
-  function: "dhcp"
-  dhcp:
-    action: "remove_dns"
-    enabled: "true"
-    network_name: "LAN"
-    subnet: "192.168.10.0/24"
-    lease: "86400"
-    range: "range-1"
-    start: "192.168.10.19"
-    end: "192.168.10.254"
-    default_router: "192.168.10.12"
-    dns_server: "8.8.8.8"
-    old_subnet: "192.168.1.0/24"
+######### DHCP ########
+dhcp_action: "remove_dns"
+dhcp_enabled: "true"
+dhcp_network_name: "LAN"
+dhcp_subnet: "192.168.10.0/24"
+dhcp_lease: "86400"
+dhcp_range: "range-1"
+dhcp_start: "192.168.10.19"
+dhcp_end: "192.168.10.254"
+dhcp_default_router: "192.168.10.12"
+dhcp_dns_server: "8.8.8.8"
+dhcp_old_subnet: "192.168.1.0/24"
 
 ######### Firewall ########
-firewall:
-  function: "add_rule"
-  name: "OUTSIDE-IN"      #can't rename.
-  default_action: "drop"
-  rule_set_description: "all ssh via 2222"
-  enable_default_log: "true"
-  interface: "eth0"
-  direction: "in"
-  rule_number: "10"
-  action: "accept"
-  rule_description: ""
-  destination_address: "192.168.0.6" #ip, subnet, ip-range,invert"
-  destination_address_group: ""
-  destination_network_group: ""
-  destination_port_group: ""
-  destination_port: "22"
-  source_address: ""
-  source_address_group: ""
-  source_network_group: ""
-  source_port_group: ""
-  source_port: ""
-  protocol: "tcp"
-  disabled: "false"
-  state:
+firewall_function: "add_rule"
+firewall_name: "OUTSIDE-IN"      #can't rename.
+firewall_default_action: "drop"
+firewall_rule_set_description: "all ssh via 2222"
+firewall_enable_default_log: "true"
+firewall_interface: "eth0"
+firewall_direction: "in"
+firewall_rule_number: "10"
+firewall_action: "accept"
+firewall_rule_description: ""
+firewall_destination_address: "192.168.0.6" #ip, subnet, ip-range,invert"
+firewall_destination_address_group: ""
+firewall_destination_network_group: ""
+firewall_destination_port_group: ""
+firewall_destination_port: "22"
+firewall_source_address: ""
+firewall_source_address_group: ""
+firewall_source_network_group: ""
+firewall_source_port_group: ""
+firewall_source_port: ""
+firewall_protocol: "tcp"
+firewall_disabled: "false"
+firewall_state:
     established: "y"
     new: "y"
     related: "y"

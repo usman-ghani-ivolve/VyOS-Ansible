@@ -1,38 +1,92 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role configure Firewall.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Management Network configuration with done with cloud-init
+- SSH service is enable and listening on Management IP.
 
 Role Variables
 --------------
+**Add Ruleset**
+```
+firewall_function
+name
+default_action
+rule_set_description
+enable_default_log
+direction
+interface
+```
+**Remove Ruleset**
+```
+firewall_function
+name
+direction
+interface
+```
+**Add Rule**
+```
+firewall_function
+name
+rule_number
+action
+rule_description
+destination_address
+destination_address_group
+destination_network_group
+destination_port_group
+destination_port
+source_address
+source_address_group
+source_network_group
+source_port_group
+source_port
+protocol
+disabled
+state
+```
+**Remove Rule**
+```
+firewall_function
+name
+rule_number
+```
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role depends on following roles:
+
+- nat
 
 Example Playbook
 ----------------
+A reference playbook with required variables for this role.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    ---
+    - hosts: vyos-2        
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+        - role: firewall
+          vars:
+            name: "myruleset-1"
+            rule_number: "10"
+            action: "accept"
+            rule_description: "ruledesc"
+            destination_address: ""
+            destination_address_group: ""
+            destination_network_group: ""
+            destination_port_group: ""
+            destination_port: ""
+            source_address: ""
+            source_address_group: ""
+            source_network_group: ""
+            source_port_group: ""
+            source_port: ""
+            protocol: "tcp"
+            disabled: "false"
+            state: "{"new": "true"}"

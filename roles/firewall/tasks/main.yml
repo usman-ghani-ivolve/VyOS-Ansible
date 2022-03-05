@@ -1,2 +1,2 @@
 ---
-- include_tasks: "{{ firewall.function }}.yml"
+- include_tasks: "{{ firewall_function }}.yml"

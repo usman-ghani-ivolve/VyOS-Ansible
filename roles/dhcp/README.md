@@ -27,19 +27,18 @@ lease
 Dependencies
 ------------
 
-This role depends on following roles:
+None
 
 Example Playbook
 ----------------
 A reference playbook with required variables for this role.
 
-**Add DNS**
     ---
     - hosts: vyos-2        
       roles:
-        - role: get_config
+        - role: dhcp
           vars:
-            action: "remove"
+            action: "add"
             network_name: "LAN"
             subnet: "192.168.0.0/24"
             range: "default_range"

@@ -4,8 +4,8 @@
     tasks_from: configure_ipv4
   vars:
     action: "remove"
-    interface: "{{ default.wan_interface }}"
-    address: "{{ eip.address }}/32"
+    interface: "{{ default_wan_interface }}"
+    address: "{{ eip_address }}/32"
 
 - name: CONFIGURE DNAT
   include_role:
@@ -13,7 +13,7 @@
     tasks_from: configure_dnat
   vars:
     action: "remove"
-    rule_number: "{{ dnat.rule_number }}"
+    rule_number: "{{ dnat_rule_number }}"
 
 - name: CONFIGURE SNAT
   include_role:
@@ -21,4 +21,4 @@
     tasks_from: configure_snat
   vars:
     action: "remove"
-    rule_number: "{{ snat.rule_number }}"
+    rule_number: "{{ snat_rule_number }}"

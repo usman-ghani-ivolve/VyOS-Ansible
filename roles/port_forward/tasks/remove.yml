@@ -4,4 +4,4 @@
     tasks_from: configure_dnat
   vars:
     action: "remove"
-    rule_number: "{{ port_fwd.rule_number }}"
+    rule_number: "{{ dnat_rule_number }}"
