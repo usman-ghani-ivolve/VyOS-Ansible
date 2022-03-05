@@ -40,7 +40,8 @@ This role depends on following roles:
 
 Example Playbook
 ----------------
-A refrence playbook with required variables of how to use this role.
+A reference playbook with required variables of how to use this role.
+
     ---
     hosts: vyos-2        
     roles:
