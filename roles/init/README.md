@@ -13,31 +13,51 @@ Role Variables
 --------------
 
 ```
-* init.function: "bootstrap"
-* init.wan_ip: ""
-* init.wan_gateway: ""
+default.lan_interface
+default.lan_ip
+default.lan_subnet
+default.dhcp_start
+default.dhcp_end
+default.default_router
+default.dns_server
+default.lease
+default.snat_rule_number
+default.wan_interface
+default.lan_subnet
+init.function
+init.wan_ip
+init.wan_gateway
 ```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role depends on following roles:
+- interfaces
+- services
+- nat
+- firewall
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+    ---
+    hosts: vyos-2        
+    roles:
+      - bootstrap
+        vars:
+          default.lan_interface: "eth2"
+          default.lan_ip: "192.168.0.1"
+          default.lan_subnet: "192.168.0.0/24"
+          default.dhcp_start: "192.168.0.2"
+          default.dhcp_end: "192.168.0.254"
+          default.default_router: "192.168.0.1"
+          default.dns_server: "8.8.8.8"
+          default.lease: "86400"
+          default.snat_rule_number: "100"
+          default.wan_interface: "eth0"
+          init.function: "bootstrap"
+          init.wan_ip: "20.30.40.50"
+          init.wan_gateway: "20.30.40.1"
