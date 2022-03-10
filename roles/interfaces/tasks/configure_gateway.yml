@@ -2,14 +2,14 @@
 - name: Configure Gateway
   vyos.vyos.vyos_config:
     lines:
-    - set interfaces ethernet {{ network.interface }} address {{ network.ip_address }}
-    - delete interfaces ethernet {{ network.interface }} address {{ network.old_ip_address }}
-  when: service.dhcp.enabled == "false"
+    - set interfaces ethernet {{ network_interface }} address {{ network_ip_address }}
+    - delete interfaces ethernet {{ network_interface }} address {{ network_old_ip_address }}
+  when: dhcp_enabled == "false"
 
 - name: Configure Gateway
   vyos.vyos.vyos_config:
     lines:
-    - set interfaces ethernet {{ network.interface }} address {{ network.ip_address }}
-    - set service dhcp-server shared-network-name {{ network.interface_description }} subnet {{ network.subnet }} default-router {{ network.default_router }}
-    - delete interfaces ethernet {{ network.interface }} address {{ network.old_ip_address }}
-  when: service.dhcp.enabled == "true"
+    - set interfaces ethernet {{ network_interface }} address {{ network_ip_address }}
+    - set service dhcp-server shared-network-name {{ network_name }} subnet {{ network_subnet }} default-router {{ default_router }}
+    - delete interfaces ethernet {{ network_interface }} address {{ network_old_ip_address }}
+  when: dhcp_enabled == "true"

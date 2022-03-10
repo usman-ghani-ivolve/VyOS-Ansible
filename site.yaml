@@ -9,14 +9,14 @@
   
     - name: Get Configuration
       import_role:
-        name: common
+        name: get_config
       vars:
         resource: "{{ common.resource }}"
       when: get_config is defined
     
     - name: Bootstrap Router
       import_role:
-        name: init
+        name: bootstrap
       when: bootstrap is defined
 
     - name: Configure Elastic IP
@@ -26,8 +26,8 @@
 
     - name: Conifgure Port Forwarding
       import_role:
-        name: port_forwarding
-      when: port_forwarding is defined
+        name: port_forward
+      when: port_forward is defined
 
     - name: Conifgure Ruleset
       import_role:
@@ -71,7 +71,7 @@
 
     - name: Configure DHCP
       import_role:
-        name: services
+        name: dhcp
       vars:
         action: "{{ dhcp_action }}"
         enabled: "{{ dhcp_enabled }}"
@@ -84,4 +84,4 @@
         default_router: "{{ dhcp_default_router }}"
         dns_server: "{{ dhcp_dns_server }}"
         old_subnet: "{{ dhcp_old_subnet }}"
-    #   when: configure_dhcp is defined
+      when: configure_dhcp is defined

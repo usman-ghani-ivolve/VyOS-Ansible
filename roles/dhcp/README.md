@@ -1,7 +1,7 @@
-Role Name
-=========
+DHCP
+====
 
-This role fetch router configuration.
+This role configure DHCP.
 
 Requirements
 ------------

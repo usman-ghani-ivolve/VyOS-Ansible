@@ -1,7 +1,7 @@
 Role Name
 =========
 
-This role add/remove Elastic IP on router.
+This role configure Elastic IP on router.
 
 Requirements
 ------------
@@ -11,7 +11,7 @@ Requirements
 
 Role Variables
 --------------
-
+**Add EIP**
 ```
 action
 default_wan_interface
@@ -20,6 +20,14 @@ dnat_rule_number
 dnat_translation_address
 snat_rule_number
 snat_source_address
+```
+**Remove EIP**
+```
+action
+default_wan_interface
+eip_address
+dnat_rule_number
+snat_rule_number
 ```
 
 Dependencies

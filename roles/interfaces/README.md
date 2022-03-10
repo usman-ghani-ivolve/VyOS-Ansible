@@ -1,38 +1,68 @@
-Role Name
+Interfaces
 =========
 
-A brief description of the role goes here.
+This role configure router interfaces.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Management Network configuration with done with cloud-init
+- SSH service is enable and listening on Management IP.
 
 Role Variables
 --------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+**Configure Subnet**
+```
+network_function
+network_interface
+network_ip_address
+network_old_ip_address
+dhcp_action
+dhcp_enabled
+network_name
+dhcp_subnet
+dhcp_range
+dhcp_start
+dhcp_end
+default_router
+dhcp_old_subnet
+```
+**Configure Gatteway**
+```
+network_function
+network_interface
+network_ip_address
+network_subnet
+network_old_ip_address
+dhcp_action
+dhcp_enabled
+network_name
+default_router
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role depends on following roles:
+- interfaces
+- dhcp
+- nat
+- firewall
 
 Example Playbook
 ----------------
+A reference playbook with required variables for this role.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    ---
+    - hosts: vyos-2        
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+        - role: interfaces
+          vars:
+            network_function: "configure_gateway"
+            network_interface: "eth2"
+            network_subnet: "192.168.0.0/24"
+            network_ip_address: "192.168.0.254/24"
+            network_old_ip_address: "192.168.0.1"
+            dhcp_enabled: "true"
+            network_name: "LAN"
+            default_router: "192.168.0.254"

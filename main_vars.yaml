@@ -1,21 +1,16 @@
 ######### DEFAULT ########
-default:
-  wan_interface: "eth0"
-  
-  lan_interface: "eth2"
-  lan_subnet: "192.168.0.0/24"
-  lan_ip: "192.168.0.1"
-  
-  mgmt_interface: "eth1"
-  mgmt_ip_address: "10.0.0.102/24"
-
-  dhcp_start: "192.168.0.2"
-  dhcp_end: "192.168.0.254"
-  dns_server: "8.8.8.8"
-  default_router: "192.168.0.1"
-  lease: "86400"
-
-  snat_rule_number: "100"
+default_wan_interface: "eth0" 
+default_lan_interface: "eth2"
+default_lan_subnet: "192.168.0.0/24"
+default_lan_ip: "192.168.0.1"
+default_mgmt_interface: "eth1"
+default_mgmt_ip_address: "10.0.0.102/24"
+default_dhcp_start: "192.168.0.2"
+default_dhcp_end: "192.168.0.254"
+default_dns_server: "8.8.8.8"
+default_default_router: "192.168.0.1"
+default_lease: "86400"
+default_snat_rule_number: "100"
 
 ######### FUNCTION ########
 # get_config:
@@ -29,8 +24,6 @@ common:
   resource: "all" #bgp_address_family, bgp_global, firewall_global, firewall_interfaces, firewall_rules, interfaces, l3_interfaces, lag_interfaces, lldp_global, lldp_interfaces, logging_global, ntp_global, ospf_interfaces, ospfv2, ospfv3, prefix_lists, route_maps, snmp_server, static_routes
 
 ######### BOOTSTRAP ########
-init:
-  function: "bootstrap"
   wan_ip: ""
   wan_gateway: "20.30.40.1"
 
@@ -39,41 +32,37 @@ eip_function: "remove_eip" #Valid options [add_eip, remove_eip]
 eip_address: "20.30.40.100"
 
 ######### Port Forwarding ########
-port_fwd:
-  function: "add_port_fwd"
-  protocol: "tcp"
-  destination_address: "20.30.40.50"
-  translation_address: "192.168.0.6"
-  destination_port: "2222"
-  translation_port: "22"
+port_fwd_function: "add"
+port_fwd_protocol: "tcp"
+port_fwd_destination_address: "20.30.40.50"
+port_fwd_translation_address: "192.168.0.2"
+port_fwd_destination_port: "2222"
+port_fwd_translation_port: "22"
 
 ######### DNAT ########
-dnat:
-  action: "add"
-  rule_number: "50"
-  interface: "eth0"
-  protocol: "tcp"  #Valid options [add_eip, remove_eip]
-  destination_address: "{{ eip.address }}"
-  translation_address: "192.168.0.6"
+dnat_action: "add"
+dnat_rule_number: "50"
+dnat_interface: "eth0"
+dnat_protocol: "tcp"  #Valid options [add_eip, remove_eip]
+dnat_destination_address: "{{ eip.address }}"
+dnat_translation_address: "192.168.0.6"
 
 ######### SNAT ########
-snat:
-  action: "add"
-  rule_number: "50"
-  interface: "eth0"
-  protocol: "all"
-  source_address: "192.168.0.6"
-  translation_address: "{{ eip.address }}"
+snat_action: "add"
+snat_rule_number: "50"
+snat_interface: "eth0"
+snat_protocol: "all"
+snat_source_address: "192.168.0.6"
+snat_translation_address: "{{ eip.address }}"
 
 ######### INTERFACE ########
-network:
-  function: "configure_subnet"
-  subnet: "192.168.1.0/24"
-  interface: "eth2"
-  interface_description: "LAN"
-  ip_address: "192.168.10.12/24"
-  old_ip_address: "192.168.1.12/24"
-  default_router: "192.168.10.12"
+network_function: "configure_subnet"
+network_subnet: "192.168.1.0/24"
+network_interface: "eth2"
+network_interface_description: "LAN"
+network_ip_address: "192.168.10.12/24"
+network_old_ip_address: "192.168.1.12/24"
+network_default_router: "192.168.10.12"
 
 ######### DHCP ########
 dhcp_action: "remove_dns"
@@ -92,7 +81,7 @@ dhcp_old_subnet: "192.168.1.0/24"
 firewall_function: "add_rule"
 firewall_name: "OUTSIDE-IN"      #can't rename.
 firewall_default_action: "drop"
-firewall_rule_set_description: "all ssh via 2222"
+firewall_rule_set_description: ""
 firewall_enable_default_log: "true"
 firewall_interface: "eth0"
 firewall_direction: "in"

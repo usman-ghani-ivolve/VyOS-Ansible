@@ -1,14 +1,21 @@
 ---
 - hosts: vyos-2        
   roles:
-    - role: firewall
+    - role: interfaces
       vars:
-        firewall_function: group
-        action: remove_member
-        type: network
-        group_name: mygroup
-        group_description:
-        member: 192.168.0.0/24
-        members:
-          - address: 192.168.0.0/24
-          - address: 192.168.1.0/24
+        network_function: "configure_subnet"
+        network_interface: "eth2"
+        network_subnet: "192.168.100.0/24"
+        network_ip_address: "192.168.100.254/24"
+        network_old_ip_address: "192.168.50.254/24"
+        dhcp_enabled: "true"
+        dhcp_action: "add"
+        dhcp_subnet: "192.168.100.0/24"
+        dhcp_range: "myrange"
+        dhcp_range_start: "192.168.100.10"
+        dhcp_range_end: "192.168.100.50"
+        dhcp_old_subnet: "192.168.50.0/24"
+        dhcp_network_name: "LAN"
+        dhcp_default_router: "192.168.50.254"
+        dhcp_dns_server: "8.8.8.8"
+        dhcp_lease: "86400"

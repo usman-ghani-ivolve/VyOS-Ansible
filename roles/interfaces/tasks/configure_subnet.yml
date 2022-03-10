@@ -1,31 +1,29 @@
 - name: Configure Sunbet | IP Address
   vyos.vyos.vyos_config:
     lines:
-    - set interfaces ethernet {{ network.interface }} address '{{ network.ip_address }}'
-    - delete interfaces ethernet {{ network.interface }} address '{{ network.old_ip_address }}'
-
-- name: CONFIGURE Subnet | Add DHCP
-  include_role:
-    name: services
-    tasks_from: "dhcp"
-  vars:
-    action: "add"
-    network_name: "{{ service.dhcp.network_name }}"
-    subnet: "{{ service.dhcp.subnet }}"
-    range: "{{ service.dhcp.range }}"
-    dhcp_start: "{{ service.dhcp.start }}"
-    dhcp_end: "{{ service.dhcp.end }}"
-    default_router: "{{ service.dhcp.default_router }}"
-    dns_server: "{{ service.dhcp.dns_server }}"
-    lease: "{{ service.dhcp.lease }}"
-  when: service.dhcp.enabled == "true"
+    - set interfaces ethernet {{ network_interface }} address '{{ network_ip_address }}'
+    - delete interfaces ethernet {{ network_interface }} address '{{ network_old_ip_address }}'
 
 - name: CONFIGURE Subnet | Remove DHCP
   include_role:
-    name: services
-    tasks_from: "dhcp"
+    name: dhcp
   vars:
     action: "remove"
-    network_name: "{{ service.dhcp.network_name }}"
-    subnet: "{{ service.dhcp.old_subnet }}"
-  when: service.dhcp.enabled == "true"
+    network_name: "{{ dhcp_network_name }}"
+    subnet: "{{ dhcp_old_subnet }}"
+  when: dhcp_enabled == "true"
+
+- name: CONFIGURE Subnet | Add DHCP
+  include_role:
+    name: dhcp
+  vars:
+    action: "add"
+    network_name: "{{ dhcp_network_name }}"
+    subnet: "{{ dhcp_subnet }}"
+    range: "{{ dhcp_range }}"
+    dhcp_start: "{{ dhcp_range_start }}"
+    dhcp_end: "{{ dhcp_range_end }}"
+    default_router: "{{ dhcp_default_router }}"
+    dns_server: "{{ dhcp_dns_server }}"
+    lease: "{{ dhcp_lease }}"
+  when: dhcp_enabled == "true"
