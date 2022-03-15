@@ -12,6 +12,11 @@
 #     lines:
 #     - set protocols static route 0.0.0.0/0 next-hop "{{ wan_gateway }}"
 
+- name: Conifgure Router DNS
+  vyos.vyos.vyos_config:
+    lines:
+    - set system name-server "{{ default_router_dns }}"
+
 - name: Conifgure LAN Interface
   include_role:
     name: interfaces

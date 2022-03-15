@@ -1,0 +1,13 @@
+- name: QoS | {% if action == 'add' %}Add{% elif action == 'update'%}Update{% endif %} Policy
+  vyos.vyos.vyos_config:
+    lines:
+    - set traffic-policy "{% if direction == 'ingress' %}limiter{% elif direction == 'egress'%}shaper{% endif %}" "{{ policy_name }}" default bandwidth "{{ bandwidth }}{{ unit }}"
+    - set interfaces ethernet eth0 traffic-policy {% if direction == 'ingress' %}in{% elif direction == 'egress'%}out{% endif %} "{{ policy_name }}"
+  when: action == "add" or action == "update" 
+
+- name: QoS | Remove Policy
+  vyos.vyos.vyos_config:
+    lines:
+    - delete interfaces ethernet eth0 traffic-policy {% if direction == 'ingress' %}in{% elif direction == 'egress'%}out{% endif %} "{{ policy_name }}"
+    - delete traffic-policy {% if direction == 'ingress' %}limiter{% elif direction == 'egress'%}shaper{% endif %} "{{ policy_name }}"
+  when: action == "remove" 

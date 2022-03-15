@@ -1,6 +1,6 @@
 ---
 - name: Configure VyOS
-  hosts: vyos-2
+  hosts: vyos-1
   gather_facts: false
   vars_files:
     - ./main_vars.yaml
@@ -29,25 +29,31 @@
         name: port_forward
       when: port_forward is defined
 
-    - name: Conifgure Ruleset
-      import_role:
-        name: firewall
-      vars:
-        name: "{{firewall_name}}"
-        default_action: "{{firewall_default_action}}"
-        rule_set_description: "{{firewall_rule_set_description}}"
-        enable_default_log: "{{firewall_enable_default_log}}"
-        interface: "{{ firewall_interface }}"
-        direction: "{{ firewall_direction }}"
-      when: firewalld is defined
+    # - name: Conifgure Ruleset
+    #   import_role:
+    #     name: firewall
+    #   vars:
+    #     name: "{{firewall_name}}"
+    #     default_action: "{{firewall_default_action}}"
+    #     rule_set_description: "{{firewall_rule_set_description}}"
+    #     enable_default_log: "{{firewall_enable_default_log}}"
+    #     interface: "{{ firewall_interface }}"
+    #     direction: "{{ firewall_direction }}"
+    #   when: firewalld is defined
 
     - name: Adding Firewall Role
       import_role:
         name: firewall
       vars:
         name: "{{firewall_name}}"
-        rule_number: "{{firewall_rule_number}}"
+        rule_set_description: "{{firewall_rule_set_description}}"
+        default_action: "{{firewall_default_action}}"
+        enable_default_log: "{{firewall_enable_default_log}}"
+        interface: "{{ firewall_interface }}"
+        direction: "{{ firewall_direction }}"
         action: "{{firewall_action}}"
+        
+        rule_number: "{{firewall_rule_number}}"
         rule_description: "{{firewall_rule_description}}"
         destination_address: "{{firewall_destination_address}}"
         destination_address_group: "{{firewall_destination_address_group}}"
@@ -85,3 +91,14 @@
         dns_server: "{{ dhcp_dns_server }}"
         old_subnet: "{{ dhcp_old_subnet }}"
       when: configure_dhcp is defined
+
+    - name: Configure QoS
+      import_role:
+        name: qos
+      vars:
+        action: "{{ qos_action }}"
+        policy_name: "{{ qos_policy_name }}"
+        direction: "{{ qos_direction }}"
+        bandwidth: "{{ qos_bandwidth }}"
+        unit: "{{ qos_unit }}"
+      when: qos is defined

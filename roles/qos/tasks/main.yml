@@ -1,2 +1,2 @@
 ---
-# tasks file for qos
+- include_tasks: "qos.yml"

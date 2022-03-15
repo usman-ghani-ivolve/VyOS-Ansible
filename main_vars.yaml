@@ -11,6 +11,7 @@ default_dns_server: "8.8.8.8"
 default_default_router: "192.168.0.1"
 default_lease: "86400"
 default_snat_rule_number: "100"
+default_router_dns: "8.8.8.8"
 
 ######### FUNCTION ########
 # get_config:
@@ -28,8 +29,8 @@ common:
   wan_gateway: "20.30.40.1"
 
 ######### EIP ########
-eip_function: "remove_eip" #Valid options [add_eip, remove_eip]
-eip_address: "20.30.40.100"
+eip_function: "add" #Valid options [add, remove]
+eip_address: "20.30.40.70"
 
 ######### Port Forwarding ########
 port_fwd_function: "add"
@@ -43,17 +44,17 @@ port_fwd_translation_port: "22"
 dnat_action: "add"
 dnat_rule_number: "50"
 dnat_interface: "eth0"
-dnat_protocol: "tcp"  #Valid options [add_eip, remove_eip]
-dnat_destination_address: "{{ eip.address }}"
-dnat_translation_address: "192.168.0.6"
+dnat_protocol: "all"  #Valid options [add_eip, remove_eip]
+dnat_destination_address: "{{ eip_address }}"
+dnat_translation_address: "192.168.0.2"
 
 ######### SNAT ########
 snat_action: "add"
 snat_rule_number: "50"
 snat_interface: "eth0"
 snat_protocol: "all"
-snat_source_address: "192.168.0.6"
-snat_translation_address: "{{ eip.address }}"
+snat_source_address: "192.168.0.2"
+snat_translation_address: "{{ eip_address }}"
 
 ######### INTERFACE ########
 network_function: "configure_subnet"
@@ -78,27 +79,30 @@ dhcp_dns_server: "8.8.8.8"
 dhcp_old_subnet: "192.168.1.0/24"
 
 ######### Firewall ########
-firewall_function: "add_rule"
-firewall_name: "OUTSIDE-IN"      #can't rename.
+firewall_function: "rule"
+firewall_action: "add"
+
+firewall_name: "Allow_EIP"      #can't rename.
 firewall_default_action: "drop"
 firewall_rule_set_description: ""
 firewall_enable_default_log: "true"
 firewall_interface: "eth0"
 firewall_direction: "in"
+
 firewall_rule_number: "10"
-firewall_action: "accept"
 firewall_rule_description: ""
-firewall_destination_address: "192.168.0.6" #ip, subnet, ip-range,invert"
+rule_action: "accept"
+firewall_destination_address: "192.168.0.2" #ip, subnet, ip-range,invert"
 firewall_destination_address_group: ""
 firewall_destination_network_group: ""
 firewall_destination_port_group: ""
-firewall_destination_port: "22"
+firewall_destination_port: ""
 firewall_source_address: ""
 firewall_source_address_group: ""
 firewall_source_network_group: ""
 firewall_source_port_group: ""
 firewall_source_port: ""
-firewall_protocol: "tcp"
+firewall_protocol: "all"
 firewall_disabled: "false"
 firewall_state:
     established: "y"
@@ -106,9 +110,12 @@ firewall_state:
     related: "y"
     invalid: "f"
 
-
-
-
+######### QoS ########
+qos_bandwidth: "2.5"
+qos_unit: "mbit"
+qos_direction: "egress"
+qos_action: "add"
+qos_policy_name: "EGRESS1"
 
 
 
